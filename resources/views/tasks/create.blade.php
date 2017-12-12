@@ -27,7 +27,7 @@
   </div>    
 </div>      
     
-    {!! Form::submit('追加') !!}
+    {!! Form::submit('追加',['class'=>'btn btn-primary']) !!}
   {!! Form::close() !!}
 
 
