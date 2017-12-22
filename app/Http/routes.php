@@ -11,9 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// トップページにアクセス
+Route::get('/', 'TasksController@index');
 
 //ユーザー認証用ルーティング
 Route::get('signup', 'Auth\AuthController@getRegister')->name('signup.get');
@@ -23,3 +22,8 @@ Route::post('signup', 'Auth\AuthController@postRegister')->name('signup.post');
 Route::get('login', 'Auth\AuthController@getLogin')->name('login.get');
 Route::post('login', 'Auth\AuthController@postLogin')->name('login.post');
 Route::get('logout', 'Auth\AuthController@getLogout')->name('logout.get');
+
+//ログイン認証用条件つき
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('tasks', 'TasksController');
+});
