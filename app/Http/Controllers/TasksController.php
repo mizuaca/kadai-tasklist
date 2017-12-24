@@ -42,6 +42,7 @@ class TasksController extends Controller
     {
         $task= new Task;
         
+         if (\Auth::check()) 
         return view ('tasks.create',[
             'task'=>$task,
         ]);
@@ -83,11 +84,24 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-        $task = Task::find($id);
+        $user = null;
+        $data = [];
         
-        return view ('tasks.show',[
-            'task'=>$task,
-        ]);
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            $task = $user->tasks()->find($id);
+        }
+        
+        if(empty($task)){
+            return redirect ('/');
+        }
+        
+        $data = [
+            'user' => $user,
+            'task' => $task,
+        ];
+        
+        return view ('tasks.show',$data);
     }
 
     /**
@@ -98,10 +112,25 @@ class TasksController extends Controller
      */
     public function edit($id)
     {
-        $task = Task::find($id);
-        return view ('tasks.edit',[
-            'task'=>$task,
-        ]);
+        $user = null;
+        $data = [];
+        $task = [];
+        
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            $task = $user->tasks()->find($id);
+        }
+        
+        if(empty($task)){
+            return redirect ('/');
+        }
+        
+         $data = [
+            'user' => $user,
+            'task' => $task,
+        ];
+        
+        return view ('tasks.edit',$data);
         
     }
 
@@ -142,7 +171,24 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        $task = Task::find($id);
+        $user = null;
+        $data = [];
+        $task = [];
+        
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            $task = $user->tasks()->find($id);
+        }
+        
+        if(empty($task)){
+            return redirect ('/');
+        }
+        
+         $data = [
+            'user' => $user,
+            'task' => $task,
+        ];
+        
         $task->delete();
         
         return redirect('/');
